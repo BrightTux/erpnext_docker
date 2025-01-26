@@ -1,3 +1,45 @@
+# Custom ERPNext build
+
+Goal: automate the installation of erpnext in docker, installation of custom apps, etc
+
+## Changelog:
+
+1. Added a 'nuke' functionality to clear all the changes in `clear_all.sh`
+2. Automated the installation of desired packages -- TODO: add it in a script to fully automate it, add cronjob to pull changes
+3. Custom site
+
+## Getting started
+
+1. git clone this repo
+2. create a `apps.json` file with the custom modules we want
+3. upon creating the file, validate if the file is correct using `jq empty apps.json`
+4. export it `export APPS_JSON_BASE64=$(base64 -w 0 ./apps.json)`
+5. verify if its correct `echo -n ${APPS_JSON_BASE64} | base64 -d`
+6. build the custom docker image
+```
+docker build \
+  --build-arg=FRAPPE_PATH=https://github.com/frappe/frappe \
+  --build-arg=FRAPPE_BRANCH=version-15 \
+  --build-arg=APPS_JSON_BASE64=$APPS_JSON_BASE64 \
+  --tag=ghcr.io/user/repo/custom:1.0.0 \
+  --file=images/layered/Containerfile .
+```
+7. change the container name in the `pwd.yml` file to use `ghcr.io/user/repo/custom:1.0.0` as the base image (we can change the name later on)
+
+8. run the docker compose file using `docker compose -f pwd.yml up -d`
+
+9. wait for 5 minutes for the site to be created. check using `docker logs frappe_docker-create-site-1 -f`
+
+10. open the app in browser.
+
+Then we can do the changes we desire.
+
+
+
+
+
+-----
+
 [![Build Stable](https://github.com/frappe/frappe_docker/actions/workflows/build_stable.yml/badge.svg)](https://github.com/frappe/frappe_docker/actions/workflows/build_stable.yml)
 [![Build Develop](https://github.com/frappe/frappe_docker/actions/workflows/build_develop.yml/badge.svg)](https://github.com/frappe/frappe_docker/actions/workflows/build_develop.yml)
 

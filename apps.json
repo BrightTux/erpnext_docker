@@ -1,0 +1,14 @@
+[
+  {
+    "url": "https://github.com/frappe/erpnext.git",
+    "branch": "version-15"
+  },
+  {
+    "url": "https://github.com/ERPGulf/myinvois.git",
+    "branch": "main"
+  },
+  {
+    "url": "https://github.com/frappe/builder.git",
+    "branch": "develop"
+  }
+]
